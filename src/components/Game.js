@@ -36,16 +36,19 @@ export default class Game extends React.Component {
             ),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
+            moveSelected: null,
         });
     };
 
-    jumpTo(step) {
+    jumpTo(step, moveIndex) {
         this.setState(
             {
                 stepNumber: step,
                 xIsNext: (step % 2) === 0,
+                moveSelected: moveIndex,
             }
         );
+
     }
 
     render() {
@@ -60,6 +63,7 @@ export default class Game extends React.Component {
             let moveColumn = null;
             let moveRow = null;
 
+            // Define the index column
             if ([0, 3, 6].includes(moveIndex)) {
                 moveColumn = 1;
             } else if ([1, 4, 7].includes(moveIndex)) {
@@ -68,6 +72,7 @@ export default class Game extends React.Component {
                 moveColumn = 3;
             }
 
+            // Define the index row
             if (moveIndex > -1 && moveIndex < 3) {
                 moveRow = 1;
             } else if (moveIndex < 6) {
@@ -83,7 +88,7 @@ export default class Game extends React.Component {
             const buttonId = `move-button-${move}`;
             return (
                 <li key={move}>
-                    <button id={buttonId} onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button id={buttonId} onClick={() => this.jumpTo(move, moveIndex)}>{desc}</button>
                     <label htmlFor={buttonId}>{label}</label>
                 </li>
             );
@@ -101,7 +106,8 @@ export default class Game extends React.Component {
                 <div className="game-board">
                     <Board
                         squares={current.squares}
-                        onClick={(i) => this.handleClick(i)} />
+                        onClick={(i) => this.handleClick(i)}
+                        moveSelected={this.state.moveSelected} />
                 </div>
                 <div className="game-info">
                     <div>{status}</div>

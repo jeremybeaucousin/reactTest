@@ -41,6 +41,11 @@ code {
   outline: none;
 }
 
+.square.selected {
+  background: grey;
+  color: white;
+}
+
 .kbd-navigation .square:focus {
   background: #ddd;
 }
