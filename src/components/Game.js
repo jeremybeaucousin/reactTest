@@ -14,6 +14,7 @@ export default class Game extends React.Component {
             ],
             stepNumber: 0,
             xIsNext: true,
+            moveSelectedIndex: null,
         }
     };
 
@@ -36,7 +37,7 @@ export default class Game extends React.Component {
             ),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
-            moveSelected: null,
+            moveSelectedIndex: null,
         });
     };
 
@@ -45,7 +46,7 @@ export default class Game extends React.Component {
             {
                 stepNumber: step,
                 xIsNext: (step % 2) === 0,
-                moveSelected: moveIndex,
+                moveSelectedIndex: moveIndex,
             }
         );
 
@@ -58,7 +59,7 @@ export default class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             const moveIndex = step.moveIndex;
-            const moveValue = current.squares[moveIndex];
+            const moveValue = step.squares[moveIndex];
 
             let moveColumn = null;
             let moveRow = null;
@@ -86,8 +87,12 @@ export default class Game extends React.Component {
                 'Go to game start';
             const label = move ? `The player ${moveValue} has played on (${moveColumn}, ${moveRow})` : 'Game start';
             const buttonId = `move-button-${move}`;
+            console.log("move", move);
+            console.log("this.state.moveSelected", this.state.moveSelectedIndex);
             return (
-                <li key={move}>
+                <li
+                    key={move}
+                    className={`${(this.state.moveSelectedIndex === move) ? 'selected' : ''}`}>
                     <button id={buttonId} onClick={() => this.jumpTo(move, moveIndex)}>{desc}</button>
                     <label htmlFor={buttonId}>{label}</label>
                 </li>
@@ -107,7 +112,7 @@ export default class Game extends React.Component {
                     <Board
                         squares={current.squares}
                         onClick={(i) => this.handleClick(i)}
-                        moveSelected={this.state.moveSelected} />
+                        moveSelected={this.state.moveSelectedIndex} />
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
